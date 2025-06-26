@@ -1,0 +1,8 @@
+Django>=4.2
+psycopg2-binary>=2.9  # если используешь PostgreSQL
+Pillow>=10.0           # для работы с изображениями
+django-crispy-forms>=2.0  # улучшенные формы в HTML
+crispy-bootstrap5      # Bootstrap 5 стили для форм
+django-cleanup         # удаляет неиспользуемые файлы из модели
+python-slugify         # для генерации slug’ов (если будут ссылки вида /artist/yeat/)
+django-environ         # для хранения переменных окружения (.env)
