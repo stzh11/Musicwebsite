@@ -1,0 +1,36 @@
+
+{% load static %}
+
+{% block title %}{{ news_item.title }}{% endblock %}
+
+{% block content %}
+<article class="news-detail">
+
+  <p><a href="{% url 'news_list' %}">&larr; Все новости</a></p>
+
+  <h1>{{ news_item.title }}</h1>
+  <p class="text-muted">
+    Опубликовано {{ news_item.created_at|date:"d.m.Y H:i" }}
+  </p>
+
+  {% if news_item.img %}
+    <div class="news-detail__image mb-4">
+      <img src="{{ news_item.img }}" alt="{{ news_item.title }}" class="img-fluid">
+    </div>
+  {% endif %}
+
+  <div class="news-detail__body mb-4">
+    {{ news_item.description|linebreaks }}
+  </div>
+
+  {% if news_item.video_url %}
+    <div class="news-detail__video embed-responsive embed-responsive-16by9 mb-4">
+      <iframe class="embed-responsive-item"
+              src="{{ news_item.video_url }}"
+              allowfullscreen>
+      </iframe>
+    </div>
+  {% endif %}
+
+</article>
+{% endblock %}

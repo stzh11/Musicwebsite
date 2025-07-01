@@ -10,6 +10,7 @@
                 <p>{{ news.video_url}}</p>
                 <p><small>Published on {{ news.published_date }}</small></p>
             </li>
+            <p><a href="{% url 'news_detail' news.id %}">View detail</a></p>
         {% endfor %}
     </ul>
 {% else %}

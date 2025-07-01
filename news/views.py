@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import News
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 class NewsListView(ListView):
     model = News
@@ -10,4 +10,11 @@ class NewsListView(ListView):
 
     def get_queryset(self):
         return News.objects.all().order_by('-created_at')
+
+class NewsDetailView(DetailView):
+    model = News
+    template_name = "news/news_detail.html"
+    context_object_name = "news_item"
+
+    
 # Create your views here.
