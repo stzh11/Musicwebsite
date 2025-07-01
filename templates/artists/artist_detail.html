@@ -1,0 +1,16 @@
+<h1>{{ artist.name }}</h1>
+<p>{{ artist.description }}</p>
+
+<h2>Песни и роли</h2>
+<ul>
+{% for song, conns in songs_roles.items %}
+  <li>
+    <a>{{ song.title }}</a> —
+    {% for conn in conns %}
+      {{ conn }}<a>, <a>
+    {% endfor %}
+  </li>
+{% empty %}
+  <li>У этого артиста пока нет песен.</li>
+{% endfor %}
+</ul>
