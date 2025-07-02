@@ -27,4 +27,5 @@ urlpatterns = [
     path("accounts/", include("users.urls")),
     path("news/", include("news.urls")),
     path("artists/", include("artists.urls")),
+    path("music/", include("music.urls")),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

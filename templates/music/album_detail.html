@@ -1,0 +1,89 @@
+
+
+{% block title %}{{ album.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-8">
+
+  {# ———————— Хэдер альбома ———————— #}
+  <div class="flex flex-col md:flex-row items-start md:items-center mb-8">
+    {% if album.cover.url %}
+      <img src="{{ album.cover.url }}"
+           alt="{{ album.title }}"
+           class="w-full md:w-48 h-48 object-cover rounded-lg shadow mr-6 mb-4 md:mb-0">
+    {% else %}
+      <div class="w-full md:w-48 h-48 bg-gray-100 flex items-center justify-center rounded-lg shadow mr-6 mb-4 md:mb-0">
+        <span class="text-gray-400">Нет обложки</span>
+      </div>
+    {% endif %}
+    <div>
+      <h1 class="text-4xl font-bold mb-2">{{ album.title }}</h1>
+      {% if album.released_date %}
+        <p class="text-sm text-gray-500 mb-1">Дата выхода: {{ album.released_date|date:"d.m.Y" }}</p>
+      {% endif %}
+      {% if album.description %}
+        <p class="text-gray-700">{{ album.description }}</p>
+      {% endif %}
+    </div>
+  </div>
+
+  {# ———————— Участники альбома ———————— #}
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-4">Участники</h2>
+    <ul class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+      {% for conn in conns %}
+        <li class="flex items-center space-x-3">
+          {% if conn.artist.avatar.url %}
+            <img src="{{ conn.artist.avatar.url }}"
+                 alt="{{ conn.artist.name }}"
+                 class="w-12 h-12 rounded-full object-cover">
+          {% else %}
+            <div class="w-12 h-12 bg-gray-200 rounded-full"></div>
+          {% endif %}
+          <div>
+            <a href="{{ conn.artist.get_absolute_url }}"
+               class="font-medium text-blue-500 hover:underline">
+              {{ conn.artist.name }}
+            </a>
+            <div class="text-sm text-gray-600">{{ conn.get_role_display }}</div>
+          </div>
+        </li>
+      {% empty %}
+        <li class="text-gray-500">Нет участников.</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  {# ———————— Список треков альбома ———————— #}
+  <section>
+    <h2 class="text-2xl font-semibold mb-4">Треки</h2>
+    <div class="space-y-6">
+      {% for song in songs %}
+        <div class="flex items-center space-x-4">
+          {% if song.cover.url %}
+            <img src="{{ song.cover.url }}"
+                 alt="{{ song.title }}"
+                 class="w-16 h-16 object-cover rounded">
+          {% else %}
+            <div class="w-16 h-16 bg-gray-100 rounded flex items-center justify-center">
+              <span class="text-gray-400 text-xs">Обложка</span>
+            </div>
+          {% endif %}
+          <div>
+            <a href="{{ song.get_absolute_url }}"
+               class="text-lg font-medium hover:underline">
+              {{ song.title }}
+            </a>
+            {% if song.released_date %}
+              <div class="text-sm text-gray-500">Дата выхода: {{ song.released_date|date:"d.m.Y" }}</div>
+            {% endif %}
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-gray-500">В этом альбоме пока нет треков.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+
+{% load static %}
+
+{% block title %}{{ song.title }}{% endblock title %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-8">
+  {# ———————— Основной блок песни ———————— #}
+  <div class="flex flex-col md:flex-row items-start md:items-center mb-8">
+    {% if song.cover.url %}
+      <img src="{{ song.cover.url }}" alt="{{ song.title }}" class="w-full md:w-48 h-48 object-cover rounded-lg shadow mr-6 mb-4 md:mb-0">
+    {% endif %}
+    <div>
+      <h1 class="text-4xl font-bold mb-2">{{ song.title }}</h1>
+      {% if song.album %}
+        <p class="text-lg text-gray-600 mb-1">Альбом: <a href="{{ song.album.get_absolute_url }}" class="text-blue-500 hover:underline">{{ song.album.title }}</a></p>
+      {% endif %}
+      {% if song.released_date %}
+        <p class="text-sm text-gray-500">Дата выхода: {{ song.released_date|date:"d.m.Y" }}</p>
+      {% endif %}
+    </div>
+  </div>
+
+  {# ———————— Описание ———————— #}
+  {% if song.description %}
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-2">Описание</h2>
+      <p class="text-gray-800">{{ song.description }}</p>
+    </section>
+  {% endif %}
+
+  {# ———————— Тексты ———————— #}
+  {% if song.lyrics %}
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-2">Текст оригинала</h2>
+      <pre class="whitespace-pre-wrap bg-gray-50 p-4 rounded">{{ song.lyrics }}</pre>
+    </section>
+  {% endif %}
+
+  {% if song.translation_lyrics %}
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-2">Перевод текста</h2>
+      <pre class="whitespace-pre-wrap bg-gray-50 p-4 rounded">{{ song.translation_lyrics }}</pre>
+    </section>
+  {% endif %}
+
+  {# ———————— Видео ———————— #}
+  {% if song.clip_url %}
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-2">Видео</h2>
+      <div class="aspect-w-16 aspect-h-9">
+        <iframe src="{{ song.clip_url }}" allowfullscreen class="w-full h-full rounded"></iframe>
+      </div>
+    </section>
+  {% endif %}
+
+  {# ———————— Слушать на Яндекс.Музыке ———————— #}
+  {% if song.yandex_music_url %}
+    <section class="mb-8">
+      <a href="{{ song.yandex_music_url }}" target="_blank" class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-medium px-4 py-2 rounded">Слушать на Яндекс.Музыке</a>
+    </section>
+  {% endif %}
+
+  {# ———————— Участники ———————— #}
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-2">Участники</h2>
+    <ul class="list-disc list-inside space-y-2">
+      {% for conn in conns %}
+        <li>
+          <a href="{{ conn.artist.get_absolute_url }}" class="font-medium text-blue-500 hover:underline">{{ conn.artist.name }}</a> — {{ conn.get_role_display }}
+        </li>
+      {% empty %}
+        <li class="text-gray-500">У этой песни ещё нет участников.</li>
+      {% endfor %}
+    </ul>
+  </section>
+</div>
+{% endblock content %}

@@ -5,7 +5,7 @@
 <ul>
 {% for song, conns in songs_roles.items %}
   <li>
-    <a>{{ song.title }}</a> —
+    <a href="{{ song.get_absolute_url }}"> {{ song.title }}</a> —
     {% for conn in conns %}
       {{ conn }}<a>, <a>
     {% endfor %}

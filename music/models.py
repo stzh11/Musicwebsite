@@ -22,7 +22,7 @@ class Album(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("music:album-detail", args=[self.id])
+        return reverse("album-detail", args=[self.slug])
 
 class Song(models.Model):
     title              = models.CharField(verbose_name="Название трека", max_length=255)
@@ -55,7 +55,7 @@ class Song(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("music:song-detail", args=[self.song_id])
+        return reverse("song-detail", args=[self.slug])
 
 
 class Genre(models.Model):
