@@ -29,30 +29,25 @@
 
   {# ———————— Участники альбома ———————— #}
   <section class="mb-12">
-    <h2 class="text-2xl font-semibold mb-4">Участники</h2>
-    <ul class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-      {% for conn in conns %}
-        <li class="flex items-center space-x-3">
-          {% if conn.artist.avatar.url %}
-            <img src="{{ conn.artist.avatar.url }}"
-                 alt="{{ conn.artist.name }}"
-                 class="w-12 h-12 rounded-full object-cover">
-          {% else %}
-            <div class="w-12 h-12 bg-gray-200 rounded-full"></div>
-          {% endif %}
-          <div>
-            <a href="{{ conn.artist.get_absolute_url }}"
-               class="font-medium text-blue-500 hover:underline">
-              {{ conn.artist.name }}
-            </a>
-            <div class="text-sm text-gray-600">{{ conn.get_role_display }}</div>
+  <h2 class="text-2xl font-semibold mb-4">Участники</h2>
+  <ul class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+    {% for artist, roles in artist_roles.items %}
+      <li class="flex items-center space-x-3">
+        <div>
+          <a href="{{ artist.get_absolute_url }}"
+             class="font-medium text-blue-500 hover:underline">
+            {{ artist.name }}
+          </a>
+          <div class="text-sm text-gray-600">
+            {{ roles|join:", " }}
           </div>
-        </li>
-      {% empty %}
-        <li class="text-gray-500">Нет участников.</li>
-      {% endfor %}
+        </div>
+      </li>
+    {% empty %}
+      <li class="text-gray-500">Нет участников.</li>
+    {% endfor %}
     </ul>
-  </section>
+    </section>
 
   {# ———————— Список треков альбома ———————— #}
   <section>

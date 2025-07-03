@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
+from slugify import slugify
 # Create your models here.
 class Artist(models.Model):
     name        = models.CharField(verbose_name="Имя артиста", max_length=255, unique=True)
@@ -24,6 +25,11 @@ class Artist(models.Model):
 
     def get_absolute_url(self):
         return reverse("artists:artist-detail", args=[self.slug or self.id])
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
 
 class ArtistLink(models.Model):

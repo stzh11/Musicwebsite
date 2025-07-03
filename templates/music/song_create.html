@@ -1,0 +1,45 @@
+{# templates/music/song_create.html #}
+
+
+{% block title %}Добавить песню{% endblock %}
+
+{% block content %}
+  <div class="max-w-3xl mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">Добавить новую песню</h1>
+
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+      {% csrf_token %}
+
+      {# Основная форма песни #}
+      <fieldset class="border p-4 rounded">
+        <legend class="font-semibold">Информация о песне</legend>
+        {{ song_form.non_field_errors }}
+        {% for field in song_form %}
+          <div class="mb-3">
+            {{ field.label_tag }}<br>
+            {{ field }}<br>
+            {{ field.errors }}
+          </div>
+        {% endfor %}
+      </fieldset>
+
+      {# Форма ролей #}
+      <fieldset class="border p-4 rounded">
+        <legend class="font-semibold">Участники (роли)</legend>
+        {{ roles_form.non_field_errors }}
+        {% for field in roles_form %}
+          <div class="mb-3">
+            {{ field.label_tag }}<br>
+            {{ field }}<br>
+            {{ field.errors }}
+          </div>
+        {% endfor %}
+      </fieldset>
+
+      <button type="submit"
+              class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Сохранить песню
+      </button>
+    </form>
+  </div>
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from slugify import slugify
 
 class Album(models.Model):
     title         = models.CharField(verbose_name="Название альбома", max_length=255)
@@ -23,6 +24,11 @@ class Album(models.Model):
 
     def get_absolute_url(self):
         return reverse("album-detail", args=[self.slug])
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
 class Song(models.Model):
     title              = models.CharField(verbose_name="Название трека", max_length=255)
@@ -56,6 +62,11 @@ class Song(models.Model):
 
     def get_absolute_url(self):
         return reverse("song-detail", args=[self.slug])
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
 
 class Genre(models.Model):

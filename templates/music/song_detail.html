@@ -74,5 +74,21 @@
       {% endfor %}
     </ul>
   </section>
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-2">Жанры</h2>
+    <ul class="list-disc list-inside space-y-2">
+      {% for genre in genres %}
+        <li>
+          <a>{{ genre.genre }}</a> 
+        </li>
+      {% empty %}
+        <li class="text-gray-500">У этой песни ещё нет жанра.</li>
+      {% endfor %}
+    </ul>
+  </section>
+  <a href="{% url 'song-create' %}"
+   class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded">
+  Добавить песню
+  </a>
 </div>
 {% endblock content %}
