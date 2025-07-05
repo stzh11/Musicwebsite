@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
 from slugify import slugify
 
 class Album(models.Model):
@@ -144,3 +145,24 @@ class SongConnection(models.Model):
 
     def __str__(self):
         return f"{self.song.title} — {self.artist.name} ({self.role})"
+    
+class SongLike(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="song_likes")
+    song = models.ForeignKey(Song, on_delete=models.CASCADE, related_name="likes")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "song")
+        verbose_name = "Лайк песни"
+        verbose_name_plural = "Лайки песен"
+
+
+class AlbumLike(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="album_likes")
+    album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="likes")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "album")
+        verbose_name = "Лайк альбома"
+        verbose_name_plural = "Лайки альбомов"

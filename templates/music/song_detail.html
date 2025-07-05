@@ -18,6 +18,24 @@
       {% if song.released_date %}
         <p class="text-sm text-gray-500">Дата выхода: {{ song.released_date|date:"d.m.Y" }}</p>
       {% endif %}
+      <form action="{% url 'song-like-toggle' song.slug %}"
+        method="post" style="display:inline">
+          {% csrf_token %}
+          {% if user.is_authenticated %}
+            {% if user.id in likes.users %}
+              <button type="submit" class="text-red-500 hover:text-red-700">
+                ❤️ Отменить лайк
+              </button>
+            {% else %}
+              <button type="submit" class="text-gray-500 hover:text-gray-700">
+                🤍 Поставить лайк
+              </button>
+            {% endif %}
+          {% else %}
+            <a href="{% url 'login' %}">Войдите, чтобы лайкать</a>
+          {% endif %}
+      </form>
+      <p>Лайков: {{ song.likes.count }}</p>
     </div>
   </div>
 
