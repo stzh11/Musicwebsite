@@ -28,4 +28,5 @@ urlpatterns = [
     path("news/", include("news.urls")),
     path("artists/", include("artists.urls", namespace="artists")),
     path("music/", include("music.urls")),
+    path("comments/", include("comments.urls", namespace="comments")),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

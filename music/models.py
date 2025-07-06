@@ -2,6 +2,8 @@ from django.db import models
 from django.urls import reverse
 from django.conf import settings
 from slugify import slugify
+from django.contrib.contenttypes.fields import GenericRelation
+from comments.models import Comment
 
 class Album(models.Model):
     title         = models.CharField(verbose_name="Название альбома", max_length=255)
@@ -14,7 +16,11 @@ class Album(models.Model):
         verbose_name="Дата добавления",
         auto_now_add=True
     )
-
+    comments = GenericRelation(Comment,
+        content_type_field="content_type",
+        object_id_field="object_id",
+        related_query_name="album"
+    )
     class Meta:
         ordering = ["-released_date"]
         verbose_name = "Альбом"
@@ -52,7 +58,11 @@ class Song(models.Model):
         verbose_name="Дата добавления",
         auto_now_add=True
     )
-
+    comments = GenericRelation(Comment,
+        content_type_field="content_type",
+        object_id_field="object_id",
+        related_query_name="song"
+    )
     class Meta:
         ordering = ["-released_date"]
         verbose_name = "Песня"

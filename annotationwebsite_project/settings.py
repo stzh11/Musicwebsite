@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "news.apps.NewsConfig",
     "music.apps.MusicConfig",
     "artists.apps.ArtistsConfig",
+    "comments.apps.CommentsConfig",
 ]
 
 MIDDLEWARE = [

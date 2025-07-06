@@ -4,9 +4,11 @@ from django.shortcuts import get_object_or_404
 from .models import Song, SongConnection, Album, AlbumConnection, Genre, AlbumGenre, SongGenre, SongLike, AlbumLike
 from .forms import SongForm, SongRolesForm
 from django.shortcuts import redirect
+from comments.forms import CommentForm
+
 def song_detail(request, slug):
    song = get_object_or_404(Song, slug=slug)
-
+   form = CommentForm()
    conn = (
       SongConnection.objects
       .filter(song=song)
@@ -17,15 +19,14 @@ def song_detail(request, slug):
         "count": likes_obects.count(),
         "users": likes_obects.values_list("user__id", flat=True)
    }
-
    genres = SongGenre.objects.filter(song=song).select_related("genre")
 
-   print(genres) 
    return render(request, "music/song_detail.html", {
       "song": song,
       "conns": conn,
       "genres": genres,
       "likes": likes,
+      "form": form,
    })
 
 
@@ -35,7 +36,7 @@ def song_detail(request, slug):
 
 def album_detail(request, slug):
     album = get_object_or_404(Album, slug=slug)
-
+    form = CommentForm()
     conns = (
         AlbumConnection.objects
         .filter(album=album)
@@ -57,6 +58,7 @@ def album_detail(request, slug):
         "artist_roles": artist_roles,
         "songs": songs,
         "likes": likes,
+        "form": form,
     })
 
 

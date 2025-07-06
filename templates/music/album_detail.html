@@ -45,6 +45,46 @@
       <p>Лайков: {{ likes.count }}</p>
   </div>
 
+  <section class="mt-8">
+  <h2 class="text-xl font-semibold mb-4">Комментарии</h2>
+
+  {% if album.comments.all %}
+    <ul class="space-y-4">
+      {% for c in album.comments.all %}
+        <li class="border-b pb-2">
+          <p class="text-sm text-gray-600">
+            {{ c.author.username }} · {{ c.created_at|date:"d.m.Y H:i" }}
+          </p>
+          <p>{{ c.text }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-gray-500">Пока нет ни одного комментария.</p>
+  {% endif %}
+</section>
+
+{# форма добавления нового комментария #}
+<section class="mt-6">
+  {% if user.is_authenticated %}
+    <form action="{% url 'comments:album-add-comment' album.slug %}"
+          method="post" class="space-y-2">
+      {% csrf_token %}
+      {{ form.text }}
+      <button type="submit"
+              class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
+        Добавить комментарий
+      </button>
+    </form>
+  {% else %}
+    <p>
+      <a href="{% url 'login' %}" class="text-blue-600 hover:underline">
+        Войдите
+      </a>, чтобы оставить комментарий.
+    </p>
+  {% endif %}
+</section>
+
   {# ———————— Участники альбома ———————— #}
   <section class="mb-12">
   <h2 class="text-2xl font-semibold mb-4">Участники</h2>
