@@ -1,16 +1,82 @@
-<h1>{{ artist.name }}</h1>
-<p>{{ artist.description }}</p>
+{# templates/artists/artist_detail.html #}
 
-<h2>Песни и роли</h2>
-<ul>
-{% for song, conns in songs_roles.items %}
-  <li>
-    <a href="{{ song.get_absolute_url }}"> {{ song.title }}</a> —
-    {% for conn in conns %}
-      {{ conn }}<a>, <a>
+{% block title %}{{ artist.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto p-6 space-y-8">
+
+  {# 1. Заголовок и описание артиста #}
+  <header class="space-y-2">
+    <h1 class="text-4xl font-bold">{{ artist.name }}</h1>
+    {% if artist.description %}
+      <p class="text-gray-700">{{ artist.description }}</p>
+    {% endif %}
+  </header>
+
+  {# 2. Подписчики #}
+<section>
+  <h2 class="text-2xl font-semibold mb-2">
+    Подписчики ({{ subscribers.count }})
+  </h2>
+
+  {# Кнопка «Подписаться/Отписаться» #}
+  {% if user.is_authenticated %}
+    <form action="{% url 'artists:subscribe-toggle' artist.slug %}"
+          method="post"
+          class="mb-4">
+      {% csrf_token %}
+      {% if user in subscribers.users %}
+        <button type="submit"
+                class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded">
+          Отписаться
+        </button>
+      {% else %}
+        <button type="submit"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded">
+          Подписаться
+        </button>
+      {% endif %}
+    </form>
+  {% else %}
+    <p>
+      <a href="{% url 'login' %}"
+         class="text-blue-600 hover:underline">
+        Войдите
+      </a>, чтобы подписаться на этого артиста.
+    </p>
+  {% endif %}
+
+  <ul class="list-disc list-inside space-y-1">
+    {% for sub in subscribers.users %}
+      <li>
+        <a href="{{ sub.subscriber.get_absolute_url }}"
+           class="text-blue-600 hover:underline">
+          {{ sub.username }}
+        </a>
+      </li>
+    {% empty %}
+      <li class="text-gray-500">У этого артиста пока нет подписчиков.</li>
     {% endfor %}
-  </li>
-{% empty %}
-  <li>У этого артиста пока нет песен.</li>
-{% endfor %}
-</ul>
+  </ul>
+</section>
+
+  {# 3. Песни и роли #}
+  <section>
+    <h2 class="text-2xl font-semibold mb-2">Песни и роли</h2>
+    <ul class="list-disc list-inside space-y-1">
+      {% for song, roles in songs_roles.items %}
+        <li>
+          <a href="{{ song.get_absolute_url }}"
+             class="text-blue-600 hover:underline">
+            {{ song.title }}
+          </a>
+           — {{ roles|join:", " }}
+        </li>
+      {% empty %}
+        <li class="text-gray-500">У этого артиста пока нет песен.</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+</div>
+{% endblock %}

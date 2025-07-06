@@ -94,3 +94,39 @@ class ArtistClaimed(models.Model):
 
     def __str__(self):
         return f"{self.user.username} → {self.artist.name} ({self.get_status_display()})"
+    
+
+
+class Subscription(models.Model):
+    """
+    Подписка пользователя на артиста.
+    """
+    subscriber = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="subscriptions",
+        verbose_name="Подписчик"
+    )
+    artist = models.ForeignKey(
+        "artists.Artist",
+        on_delete=models.CASCADE,
+        related_name="subscribers",
+        verbose_name="Артист"
+    )
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="Активна"
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата подписки"
+    )
+
+    class Meta:
+        unique_together = ("subscriber", "artist")
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
+
+    def __str__(self):
+        status = "✓" if self.is_active else "✗"
+        return f"{self.subscriber.username} → {self.artist.name} {status}"
