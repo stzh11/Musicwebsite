@@ -8,7 +8,6 @@ from .models import Comment
 from .forms import CommentForm
 
 def song_comment_create(request, slug):
-
     song = get_object_or_404(Song, slug=slug)
     form = CommentForm(request.POST)
     if form.is_valid():
@@ -19,8 +18,6 @@ def song_comment_create(request, slug):
         comment.object_id    = song.pk
 
         comment.save()
-
-    # После сохранения — возвращаемся на detail песни
     return redirect(song.get_absolute_url())
 
 
@@ -36,8 +33,6 @@ def album_comment_create(request, slug):
         comment.object_id    = album.pk
 
         comment.save()
-
-    # После сохранения — возвращаемся на detail песни
     return redirect(album.get_absolute_url())
 
 # Create your views here.

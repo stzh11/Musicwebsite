@@ -1,6 +1,5 @@
 
 {% load static %}
-
 {% block title %}{{ song.title }}{% endblock title %}
 
 {% block content %}
@@ -88,19 +87,62 @@
   {% endif %}
 
   {# ———————— Тексты ———————— #}
-  {% if song.lyrics %}
-    <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-2">Текст оригинала</h2>
-      <pre class="whitespace-pre-wrap bg-gray-50 p-4 rounded">{{ song.lyrics }}</pre>
-    </section>
-  {% endif %}
 
-  {% if song.translation_lyrics %}
-    <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-2">Перевод текста</h2>
-      <pre class="whitespace-pre-wrap bg-gray-50 p-4 rounded">{{ song.translation_lyrics }}</pre>
-    </section>
-  {% endif %}
+{# 1. Разметка самого текста, где можно выделять #}
+ <section id="lyrics" class="prose mb-8">
+  {{ highlighted_lyrics|safe }}
+</section>
+
+<style>
+  .annotation { background: yellow !important; }
+  /* на случай, если Tailwind не подключён */
+  .hidden { display: none !important; }
+</style>
+
+<!-- Модальное окно изначально скрыто -->
+<div id="annotation-modal"
+     hidden
+     class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+  <div class="bg-white p-6 rounded shadow-lg w-full max-w-md max-h-[90vh] overflow-auto">
+    {% include "music/annotation_form.html" with form=annotation_form song=song %}
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const lyricsEl = document.getElementById("lyrics");
+  const modal    = document.getElementById("annotation-modal");
+  const form     = document.getElementById("annotation-form");
+  const cancel   = document.getElementById("cancel");
+  let start, end;
+
+  lyricsEl.addEventListener("mouseup", () => {
+    const sel = window.getSelection();
+    if (!sel.rangeCount || !sel.toString().trim()) return;
+    const range = sel.getRangeAt(0);
+    start = range.startOffset;
+    end   = range.endOffset;
+    modal.hidden = false;
+  });
+
+  form.addEventListener("submit", ev => {
+    ev.preventDefault();
+    form.querySelector('input[name="start_idx"]').value = start;
+    form.querySelector('input[name="end_idx"]').value   = end;
+    form.submit();
+  });
+
+  cancel.addEventListener("click", () => {
+    modal.hidden = true;
+  });
+});
+</script>
+
+
+
+{# … дальше ваш шаблон … #}
+
+
 
   {# ———————— Видео ———————— #}
   {% if song.clip_url %}
@@ -150,3 +192,4 @@
   </a>
 </div>
 {% endblock content %}
+

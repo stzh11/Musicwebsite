@@ -1,6 +1,9 @@
 from django.urls import path
-from .views import song_detail, album_detail, song_create, song_like_toggle, album_like_toggle
+from .views import song_detail, album_detail, song_create, song_like_toggle, album_like_toggle, add_song_annotation
+
+
 urlpatterns = [
+    path( "song/<slug:slug>/add_annotation/", add_song_annotation, name="add_annotation"),
     path("song/create/", song_create, name="song-create"),
     path("song/<slug:slug>/", song_detail, name="song-detail"),
     path("album/<slug:slug>/", album_detail, name="album-detail"),

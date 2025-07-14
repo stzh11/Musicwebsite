@@ -1,7 +1,7 @@
 # music/views.py
 from django import forms
 from django.forms import inlineformset_factory
-from .models import Song, SongConnection
+from .models import Song, SongConnection, Annotation
 from artists.models import Artist
 class SongForm(forms.ModelForm):
     class Meta:
@@ -36,3 +36,21 @@ class SongRolesForm(forms.Form):
                     "size": 5,  # можно регулировать высоту списка
                 })
             )
+
+class AnnotationForm(forms.ModelForm):
+    
+    class Meta:
+        model = Annotation
+        fields = ["description", "photo_url", "start_idx", "end_idx"]
+
+        widgets = {
+            "start_idx": forms.HiddenInput(),
+            "end_idx": forms.HiddenInput(),
+            "description": forms.Textarea(attrs={
+                "rows": 3,
+                "placeholder": "Введите описание аннотации",
+            }),
+            "photo_url": forms.URLInput(attrs={
+                "placeholder": "Ссылка на фото (необязательно)",
+            })
+        }

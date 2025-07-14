@@ -176,3 +176,35 @@ class AlbumLike(models.Model):
         unique_together = ("user", "album")
         verbose_name = "Лайк альбома"
         verbose_name_plural = "Лайки альбомов"
+
+
+
+
+class Annotation(models.Model):
+    annotation_id = models.AutoField(primary_key=True)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="annotations", verbose_name="Автор аннотации")
+    song = models.ForeignKey(Song, on_delete=models.CASCADE, related_name="annotations", verbose_name="Песня")
+    
+    description = models.TextField(verbose_name="Текст аннотации", help_text="Ваши пояснения к выделенному фрагменту")
+    photo_url = models.URLField(verbose_name="Изображение (URL)", blank=True, help_text="Опциональная иллюстрация к пояснению")
+    start_idx = models.PositiveIntegerField(verbose_name="Начальный индекс", help_text="Позиция первого символа в тексте песни")
+    end_idx = models.PositiveIntegerField(verbose_name="Конечный индекс", help_text="Позиция последнего символа в тексте песни")
+    fragment = models.TextField(verbose_name="Фрагмент текста", help_text="Копия выделенного текста", blank=True)
+    is_approved = models.BooleanField(verbose_name="Одобрено модератором", default=False)
+    created_at = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Аннотация"
+        verbose_name_plural = "Аннотации"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return (
+            f"Аннотация #{self.annotation_id} "
+            f"({self.song.title}[{self.start_idx}:{self.end_idx}])"
+        )
+
+    def save(self, *args, **kwargs):
+        if not self.fragment and self.song and self.song.lyrics:
+            self.fragment = self.song.lyrics[self.start_idx : self.end_idx]
+        super().save(*args, **kwargs)

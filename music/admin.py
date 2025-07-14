@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Album, Song, Genre, AlbumGenre, SongGenre, AlbumConnection, SongConnection, SongLike, AlbumLike
+from .models import Album, Song, Genre, AlbumGenre, SongGenre, AlbumConnection, SongConnection, SongLike, AlbumLike, Annotation
 
 
 class SongAdmin(admin.ModelAdmin):
@@ -17,4 +17,5 @@ admin.site.register(AlbumConnection)
 admin.site.register(SongConnection)
 admin.site.register(SongLike)
 admin.site.register(AlbumLike)
+admin.site.register(Annotation)
 # Register your models here.

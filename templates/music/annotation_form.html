@@ -1,0 +1,33 @@
+{# templates/music/annotation_form.html #}
+{# templates/music/annotation_form.html #}
+
+<form id="annotation-form"
+      action="{% url 'add_annotation' song.slug %}"
+      method="post"
+      class="flex flex-col space-y-4">
+  {% csrf_token %}
+  {{ form.start_idx }}  {# HiddenInput #}
+  {{ form.end_idx }}
+
+  <div>
+    {{ form.description.label_tag }}
+    {{ form.description}}
+  </div> 
+
+  <div>
+    {{ form.photo_url.label_tag }}
+    {{ form.photo_url }}
+  </div>
+
+  <div class="flex justify-end space-x-2">
+    <button type="button"
+            id="cancel"
+            class="px-4 py-2 bg-gray-300 rounded">
+      Отмена
+    </button>
+    <button type="submit"
+            class="px-4 py-2 bg-blue-600 text-white rounded">
+      Сохранить
+    </button>
+  </div>
+</form>
