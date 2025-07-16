@@ -1,0 +1,17 @@
+
+{% block content %}
+  <h1>Предложить правку для «{{ song.title }}»</h1>
+  <form method="post">
+    {% csrf_token %}
+    <div>
+      {{ form.field_name.label_tag }}
+      {{ form.field_name }}
+    </div>
+    <div>
+      {{ form.new_value.label_tag }}
+      {{ form.new_value }}
+    </div>
+    <button type="submit">Отправить на модерацию</button>
+    <a href="{{ song.get_absolute_url }}">Отмена</a>
+  </form>
+{% endblock %}
